@@ -1,33 +1,37 @@
-import { useState,useRef } from "react";
+import { useRef } from "react";
 import { MdLibraryAdd } from "react-icons/md";
 function Addtodo({onNewItem}) {
-  const [todoName , setTodoName] = useState('');
-  const [dueDate , setDueDate] = useState('');
-  const noOfUpdates = useRef(0);
-
-  const handleNameChange = (e) =>{
-    setTodoName(e.target.value);
-    noOfUpdates.current +=1;
-  }
-  const handleDateChange = (e) =>{
-    setDueDate(e.target.value);
-    console.log(`no of updates are ${noOfUpdates.current}`);
-  }
+  const todoNameElement = useRef();
+  const todoDateElement = useRef();
+  //useRef ka use karke humne repainting bachali jo use state se hoti thi baar baar
+  // const handleNameChange = (e) =>{
+  //   setTodoName(e.target.value);
+  // }
+  // const handleDateChange = (e) =>{
+  //   setDueDate(e.target.value);
+  //   console.log(`no of updates are ${noOfUpdates.current}`);
+  // }
   const handleAddButtonclicked = (event) =>{
     event.preventDefault();
-    onNewItem(todoName , dueDate);
-    setDueDate("");
-    setTodoName("");
+    const todoName = todoNameElement.current.value;
+    const dueDate = todoDateElement.current.value;
+    todoNameElement.current.value = "";
+    todoDateElement.current.value = "";
+    onNewItem(todoName,dueDate);
   }
   return (
     <div className="container text-center">
       <form onSubmit={ handleAddButtonclicked}>
       <div className="row kg-row">
         <div className="col-6">
-          <input type="text" placeholder="Enter Todo Here" value={todoName} onChange={handleNameChange}/>
+          <input type="text"
+          ref={todoNameElement}
+           placeholder="Enter Todo Here" />
         </div>
         <div className="col-4">
-          <input type="date" value={dueDate} onChange={handleDateChange}/>
+          <input type="date"
+          ref={todoDateElement}
+          />
         </div>
         <div className="col-2">
           <button
