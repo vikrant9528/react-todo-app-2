@@ -5,30 +5,40 @@ import "./App.css";
 import TodoItems from "./component/TodoItems.jsx";
 import { useState } from "react";
 import WelcomeMessage from "./component/WelcomeMessage.jsx";
+import { TodoItemsContext } from "./store/todo-items-store.jsx";
 function App() {
 const [todoItems,setTodoItems] = useState([]);
-const handleNewItem = (itemName , itemDueDate)=>{
-  const newTodoItems = [...todoItems,{name:itemName,
-    dueDate:itemDueDate},
-  ];
-  setTodoItems(newTodoItems);
+const addNewItem = (itemName , itemDueDate)=>{
+  //when update is depend on past value use return function instead of spread operator called functional updates
+  setTodoItems((currValue)=>{
+    const newTodoItems = [...currValue,{name:itemName,
+      dueDate:itemDueDate},
+    ];
+    return newTodoItems
+  });
 };
-const handleDeleteItem = (todoItemName) => {
+const deleteItem = (todoItemName) => {
   const newTodoItems = todoItems.filter(item => item.name!==todoItemName)
   setTodoItems(newTodoItems);
 }
   return (
+    //context api ko tbb use karenge tbb bhut sari cheej common ho aur dependent ho
+    //using context api here at the container level which provide this data commonluy to all components
+    <TodoItemsContext.Provider value={{
+      //agr key aur value dono same ho toh aese bhi likh skte hai
+      todoItems,
+      addNewItem,
+      deleteItem
+      }}>
     <center className="todo-container">
       <Appname />
-      <Addtodo onNewItem = {handleNewItem} />
-      {todoItems.length===0 && <WelcomeMessage />}
-      <TodoItems
-       todoItems={todoItems}
-       onDeleteClick={handleDeleteItem}  >
-
+      <Addtodo  />
+      <WelcomeMessage></WelcomeMessage>
+      <TodoItems>
        </TodoItems>
      
     </center>
+    </TodoItemsContext.Provider>
   );
 }
 

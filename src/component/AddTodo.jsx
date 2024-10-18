@@ -1,6 +1,9 @@
 import { useRef } from "react";
+import { TodoItemsContext } from "../store/todo-items-store";
+import { useContext } from "react";
 import { MdLibraryAdd } from "react-icons/md";
-function Addtodo({onNewItem}) {
+function Addtodo() {
+  const { addNewItem } = useContext(TodoItemsContext);
   const todoNameElement = useRef();
   const todoDateElement = useRef();
   //useRef ka use karke humne repainting bachali jo use state se hoti thi baar baar
@@ -17,7 +20,7 @@ function Addtodo({onNewItem}) {
     const dueDate = todoDateElement.current.value;
     todoNameElement.current.value = "";
     todoDateElement.current.value = "";
-    onNewItem(todoName,dueDate);
+    addNewItem(todoName,dueDate);
   }
   return (
     <div className="container text-center">
